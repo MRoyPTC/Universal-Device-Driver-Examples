@@ -1,4 +1,4 @@
-# FileReader Poll Profile
+# FileReader File Poll Profile
 
 Script File: FileReader_FilePoll.js
 
