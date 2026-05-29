@@ -2,14 +2,13 @@
 
 ## Overview
 
-This Universal Device Driver (UDD) profile implements an EtherNet/IP (CIP) client using **UCMM (Unconnected Message Manager)** messaging. It enables communication with EtherNet/IP devices to:
+This Universal Device Driver (UDD) profile implements an EtherNet/IP (CIP) client based on **UCMM (Unconnected Message Manager)** messaging. It enables communication with EtherNet/IP devices to:
 
-- Read CIP object attributes
-- Access device identity information
-- Read tag values using Symbol Object services
-- Route messages to downstream devices (hardcoded)
+- Access CIP object attributes/services
+- Get device identity information
+- Read tag values via Symbol Object
 
-This profile establishes a session with the target device and exchanges CIP messages using `SendRRData`.
+This profile establishes an Ethernet/IP session with the target device and exchanges CIP messages using the `SendRRData` service.
 
 ---
 
@@ -113,9 +112,11 @@ Supported services:
 - `0x52` Read Tag Fragment (partial support)
 
 Notes:
-- Primarily used for reading controller tag values
+- Primarily used for reading Logix PLCs tag values
 - Supports simple scalar reads
 - Partial datatype decoding implemented
+- The method shown in this profile is just an example how to retrieve tag value from Logix PLCs
+- The profile user still needs to extend the datatype support based on their own usage
 
 ---
 
@@ -128,7 +129,7 @@ Backplane → Slot 1
 ```
 
 Notes:
-- Must be manually modified in script if needed
+- Must be manually modified in script based on the hardware network topology
 - No dynamic routing configuration available
 
 ---
@@ -213,7 +214,5 @@ This profile provides a flexible framework for EtherNet/IP UCMM communications, 
 
 It is well-suited for:
 
-- Diagnostic access to EtherNet/IP devices
 - Testing and validation scenarios
 - Custom CIP integrations
-- Lightweight industrial connectivity solutions
