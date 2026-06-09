@@ -14,6 +14,7 @@
  * - Input file is limited to 200KB. 
  * 
  * Address examples (without quotes):
+ * 'filename' - name of the file that was changed, without path
  * 'file' - contents of entire file
  * 'count' - number of lines in the file
  * 'line#' - contents of the specified line. Example: line1
@@ -32,6 +33,7 @@
  * - v1.0 Initial release
  * - v1.1 Changed to optionally not initialize tag values when no data is present, but instead set quality to Bad. Behavior
  *      is controlled by USEQUALITY constant at top of file. 
+ * - V1.2 Added filename tag address.
  * 
 ************************************************************************************************************************/
 /**
@@ -337,7 +339,7 @@ function onValidateTag(info) {
         // - "line" followed by digits (e.g., "row1"), optionally followed by "field" and more digits (e.g., "row2col3")
         // - "lastfield" followed by digits (e.g., "last10")
         // Entire string must match exactly (no partial matches)
-        const regex = /^(file|linecount|lastline|line\d+(field\d+)?|lastfield\d+)$/;
+        const regex = /^(file|filename|linecount|lastline|line\d+(field\d+)?|lastfield\d+)$/;
 
         if (regex.test(address.toLowerCase())) {
 
@@ -523,7 +525,14 @@ function onFileOperations(info) {
         }
         
         // Set value for "file" tag 
-        storage["file"]= dataAsText; 
+        storage["file"] = dataAsText; 
+        // Set value for "filename" tag (name without path)
+        try {
+            const filenameOnly = currentFile.replace(/^.*[\\/]/, '');
+            storage["filename"] = filenameOnly;
+        } catch (e) {
+            storage["filename"] = currentFile; // fallback
+        }
         // Set value for "linecount" tag  
         storage["linecount"] = lines.length;
     
@@ -667,6 +676,6 @@ function isValidFile(filename, validPatterns) {
       // Build RegExp object with case-insensitive flag
       return new RegExp(regexPattern, 'i');
     });
-  
-    return regexes.some(regex => regex.test(filename));
+	
+	return regexes.some(regex => regex.test(filename));
 }
